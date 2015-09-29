@@ -8,8 +8,8 @@ module.exports = {
     function dashboard (state) { return state.dashboard; }
 
     function update (dashboard) {
-      $()('#name').text(dashboard.name);
-      $()('#count').text(dashboard.count);
+      $()('#name').text(dashboard);
+      // $()('#count').text(dashboard.count);
     }
 
     var view = require('../../views/partials/lastfm.jade');

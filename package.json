@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "bluebird": "^2.10.1",
-    "ensemblejs": "^5.1.1",
+    "consul": "^0.18.0",
+    "ensemblejs": "file:../ensemblejs",
     "request": "^2.64.0"
   },
   "devDependencies": {

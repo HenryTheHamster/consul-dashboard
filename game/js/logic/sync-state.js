@@ -1,5 +1,6 @@
 'use strict';
 
+var Consul = require("consul")
 var Promise = require('bluebird');
 var request = Promise.promisify(require('request'));
 var execute = require('ensemblejs/src/util/interval').execute;
@@ -11,18 +12,94 @@ module.exports = {
   func: function SyncSomeState (define) {
     var state = {};
     var dirty = false;
+    var consul = Consul({
+      host: 'gandalf.ensemblejs.com',
+      port: '8500'
+    });
 
     define()('OnPhysicsFrame', function GetData () {
-      function sync () {
-        request(source).spread(function (response, body) {
-          var json = JSON.parse(body);
 
-          state = {
-            name: json.user.realname,
-            count: json.user.playcount
-          };
+      function getConsulLeader(data) {
+        return new Promise(function(resolve, reject) {
+          consul.status.leader(function(err, result) {
+            if (err) reject(err);
+            data['consulLeaderIp'] = result.split(':')[0];
+            resolve(data);
+          });    
+        });
+      }
 
+      function getConsulPeers(data) {
+        return new Promise(function(resolve, reject) {
+          consul.status.peers(function(err, result) {
+            if (err) reject(err);
+            data['consulPeerIps'] = result.map(function(val) { return val.split(':')[0] });
+            resolve(data);
+          });    
+        });
+      }
+
+      function getDockerLeader(data) {
+        return new Promise(function(resolve, reject) {
+          consul.kv.get('nodes/docker/swarm/leader', function(err, result) {
+            if (err) reject(err);
+            data['dockerLeaderName'] = result['Value']
+            resolve(data);
+          });    
+        });
+      }
+
+      function getNodes(data) {
+        return new Promise(function(resolve, reject) {
+          consul.catalog.node.list(function(err, result) {
+            if (err) reject(err);
+            data['nodes'] = result
+            resolve(data);
+          });    
+        });
+      }
+
+      function getNodeHealthChecks(node) {
+        return new Promise(function(resolve, reject) {
+          consul.health.node(node, function(err, result) {
+            if (err) reject(err);
+            resolve(result);
+          });
+        });
+      }
+
+      function getHealthChecks(data) {
+        return new Promise(function(resolve, reject) {
+          
+          var promises = [];
+          data['nodes'].forEach(function(node) {
+            promises.push(getNodeHealthChecks(node['Node']));
+          });
+          data['healthChecks'] = {}
+          Promise.all(promises).then(function(dataArr) {
+            dataArr.forEach(function(hc) {
+              data['healthChecks'][hc[0]['Node']] = hc
+            });
+            resolve(data);
+          }).catch(function(err) {
+            reject(err);
+          });
+        });    
+      }
+
+
+      function sync() {
+        getNodes({}).then(function(data) {
+          return getHealthChecks(data);
+        }).then(function(data) {
+          return getDockerLeader(data);
+        }).then(function(data) {
+          return getConsulLeader(data);  
+        }).then(function(data) {
+          state = data;
           dirty = true;
+        }).catch(function(err) {
+          console.log(err);
         });
       }
 
