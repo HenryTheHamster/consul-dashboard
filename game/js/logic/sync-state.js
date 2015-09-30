@@ -8,8 +8,8 @@ var source = 'http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=distrib
 
 module.exports = {
   type: 'GetStateAsync',
-  deps: ['DefinePlugin'],
-  func: function SyncSomeState (define) {
+  deps: ['DefinePlugin', 'Logger'],
+  func: function SyncSomeState (define, logger) {
     var state = {};
     var dirty = false;
     var consul = Consul({
@@ -89,6 +89,7 @@ module.exports = {
 
 
       function sync() {
+        logger().info("just a message")
         getNodes({}).then(function(data) {
           return getHealthChecks(data);
         }).then(function(data) {
@@ -103,7 +104,7 @@ module.exports = {
         });
       }
 
-      return execute(sync).every().minute();
+      return execute(sync).every(10).seconds();
     });
 
     define()('OnPhysicsFrame', function () {

@@ -9,7 +9,7 @@
   "dependencies": {
     "bluebird": "^2.10.1",
     "consul": "^0.18.0",
-    "ensemblejs": "file:../ensemblejs",
+    "ensemblejs": "file:///Users/ashaw/ensemble/ensemblejs",
     "request": "^2.64.0"
   },
   "devDependencies": {

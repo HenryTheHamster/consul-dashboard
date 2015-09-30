@@ -8,7 +8,7 @@ module.exports = {
     function dashboard (state) { return state.dashboard; }
 
     function update (dashboard) {
-      $()('#name').text(dashboard);
+      $()('#name').text(JSON.stringify(dashboard));
       // $()('#count').text(dashboard.count);
     }
 
