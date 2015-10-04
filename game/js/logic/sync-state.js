@@ -89,7 +89,6 @@ module.exports = {
 
 
       function sync() {
-        logger().info("just a message")
         getNodes({}).then(function(data) {
           return getHealthChecks(data);
         }).then(function(data) {
@@ -97,10 +96,40 @@ module.exports = {
         }).then(function(data) {
           return getConsulLeader(data);  
         }).then(function(data) {
-          state = data;
+          return getConsulPeers(data);  
+        }).then(function(data) {
+          state = {
+            'wizards': [],
+            'hobbits': []
+          }
+          data['nodes'].forEach(function(node) {
+            if(data['consulPeerIps'].indexOf(node['Address'])) {
+              state['wizards'].push({
+                name: node['Node'],
+                ip: node['Address'],
+                healthChecks: data['healthChecks'][node['Node']]
+              });
+            } else if(data['consulLeaderIp'].indexOf(node['Address'])) {
+              state['wizards'].push({
+                name: node['Node'],
+                ip: node['Address'],
+                consulLeader: true,
+                dockerLeader: true,
+                healthChecks: data['healthChecks'][node['Node']]
+              });
+            } else {
+              state['hobbits'].push({
+                name: node['Node'],
+                ip: node['Address'],
+                healthChecks: data['healthChecks'][node['Node']]
+              });
+            }
+          });
+
           dirty = true;
         }).catch(function(err) {
-          console.log(err);
+          logger().error("error");
+          logger().error(err);
         });
       }
 
@@ -112,9 +141,9 @@ module.exports = {
         if (!dirty) {
           return {};
         }
-
+        // state['timestamp'] = Date.now();s
         dirty = false;
-
+        logger().error(JSON.stringify(state));
         return {
           dashboard: state
         };
