@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css?family=VT323');
+body {
+  font-family: 'VT323';
+  background-color: dimgrey;
+  color: dimgrey; }
+
+.wizard {
+  padding: 20px;
+  background-color: #282828;
+  border: #4A4A4A solid 5px;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  height: 200px;
+  width: 300px;
+  margin: 20px; }
+
+.avatar {
+  float: left;
+  padding: 10px;
+  height: 100%; }
+
+.info {
+  font-size: 1em; }
+
+.check[status=passing] {
+  color: forestgreen; }
+  .check[status=passing] .name {
+    font-size: 1em; }
+
+.leader {
+  color: darkgrey; }
+
+.name {
+  font-size: 2em; }
+
+.health {
+  margin-top: 20px; }
+
+.ip {
+  font-size: 1.2em; }
+
+.passing {
+  color: forestgreen; }
+
+.warning {
+  color: goldenrod; }
+
+.failing {
+  color: firebrick; }

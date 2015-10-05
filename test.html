@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Title Goes Here</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css?family=VT323');
+body {
+  font-family: 'VT323';
+  background-color: dimgrey;
+  color: dimgrey;
+}
+.wrapper {
+  padding: 20px;
+  background-color: #282828;
+  border: #4A4A4A solid 5px;
+}
+.avatar {
+  float: left;
+  padding: 10px;
+  height: 100%;
+}
+.name {
+  font-size: 2em;
+}
+.health {
+  margin-top: 20px;
+}
+.ip {
+  font-size: 1.2em;
+}
+.passing {
+  color: forestgreen;
+}
+.warning {
+  color: goldenrod;
+}
+.failing {
+  color: firebrick;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="avatar">
+    <img src="game/sprites/gandalf.gif" >
+  </div>
+  <div class="name failing  ">
+    gandalf
+  </div>
+  <div class="ip">
+    192.168.0.1
+  </div>
+  <div class="leadership">
+    consul leader
+  </div>
+  <div class="leadership">
+    nomad leader
+  </div>
+  <div class="health">
+    <div class="passing">serfHealth</div>
+    <div class="passing">otherHealth</div>
+    <div class="failing">nomadHealth (unable to elect leader)</div>
+    <div class="passing">moreHealth</div>
+    <div class="warning">memoryFree (2034kb)</div>
+  </div>
+</div>
+</body>
+</html>
+
+

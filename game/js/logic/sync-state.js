@@ -75,10 +75,17 @@ module.exports = {
           data['nodes'].forEach(function(node) {
             promises.push(getNodeHealthChecks(node['Node']));
           });
-          data['healthChecks'] = {}
+          data.checks = []
           Promise.all(promises).then(function(dataArr) {
             dataArr.forEach(function(hc) {
-              data['healthChecks'][hc[0]['Node']] = hc
+              hc.forEach(function(c) {
+                data.checks.push({
+                  id: c.Node + '-' + c.CheckID,
+                  name: c.CheckID,
+                  node: c.Node,
+                  status: c.Status
+                });
+              });
             });
             resolve(data);
           }).catch(function(err) {
@@ -100,28 +107,28 @@ module.exports = {
         }).then(function(data) {
           state = {
             'wizards': [],
-            'hobbits': []
+            'hobbits': [],
+            'checks': data.checks
           }
           data['nodes'].forEach(function(node) {
             if(data['consulPeerIps'].indexOf(node['Address'])) {
               state['wizards'].push({
+                id: node['Node'],
                 name: node['Node'],
-                ip: node['Address'],
-                healthChecks: data['healthChecks'][node['Node']]
+                ip: node['Address']
               });
-            } else if(data['consulLeaderIp'].indexOf(node['Address'])) {
+            } else if(data['consulLeaderIp'] == node['Address']) {
               state['wizards'].push({
+                id: node['Node'],
                 name: node['Node'],
                 ip: node['Address'],
-                consulLeader: true,
-                dockerLeader: true,
-                healthChecks: data['healthChecks'][node['Node']]
+                consulLeader: true
               });
             } else {
               state['hobbits'].push({
+                id: node['Node'],
                 name: node['Node'],
-                ip: node['Address'],
-                healthChecks: data['healthChecks'][node['Node']]
+                ip: node['Address']
               });
             }
           });
@@ -141,12 +148,10 @@ module.exports = {
         if (!dirty) {
           return {};
         }
-        // state['timestamp'] = Date.now();s
+        state['timestamp'] = Date.now();
         dirty = false;
         logger().error(JSON.stringify(state));
-        return {
-          dashboard: state
-        };
+        return state;
       };
     });
 

@@ -1,5 +1,9 @@
-#wizard 
-  #avatar 
-    img(src= name)
-  #name #{name}
-  #ip #{ip}
+.wizard(id= id)
+  .avatar 
+    img(src= "../game/sprites/" + name + ".gif")
+  .info
+    .name #{name}
+    .ip #{ip}
+    if consulLeader
+      .leader consul leader
+    .checks
