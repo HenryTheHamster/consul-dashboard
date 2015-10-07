@@ -11,29 +11,12 @@ module.exports = {
     function wizards (state) { return state.wizards; }
     function checks (state) { return state.checks; }
 
-
-
-    // var template = require('../../views/partials/wizard.jade');
     var view = require('../../views/partials/wizards.jade');
-    // var checkTemplate = require('../../views/partials/health_check.jade');
-    // function update (dashboard) {
-    //   logger().error(dashboard);
-      
-    //   // $()('#name').text(JSON.stringify(dashboard));
-    //   // $()('#count').text(dashboard.count);
-    //   $()('#wizards').empty();
-    //   dashboard.wizards.forEach(function(wizard) {
-    //     var html = template({name: wizard['name'], ip: wizard['ip'], consulLeader: wizard['consulLeader']});
-    //     wizard['healthChecks'].forEach(function(check) {
-    //       html('.health').append(checkTemplate({name: check['CheckId'], status: check['Status']}));
-    //     });
-    //     $()('#wizards').append(html);
-    //   });
-    // }
+
 
     function addWizard (wizard) {
       var template = require('../../views/partials/wizard.jade');
-      $()('#wizards').append(template({id: wizard['name'], name: wizard['name'], ip: wizard.ip, consulLeader: wizard.consulLeader}));
+      $()('#wizards').append(template({id: wizard.name, name: wizard.name, ip: wizard.ip, consulLeader: wizard.consulLeader}));
     }
 
     function updateWizard (id, current, prior) {
@@ -48,14 +31,14 @@ module.exports = {
       logger().warn('adding check');
       logger().warn(check);
       var template = require('../../views/partials/check.jade');
-      $()('#' + check['node'] + ' .checks').append(template({id: check['id'], name: check['name'], status: check.status}));
+      $()('#' + check['node'] + ' .checks').append(template({id: check['id'], name: check.name, status: check.status, output: check.output}));
     }
 
     function updateCheck (id, current, prior) {
-      if(current.status == 'passing') {
-        $()('#check-' + id).innerHTML = current['name'];
-        // $()('#check-' + id).setAttribute('status', 'passing');
-      }
+      logger().warn('id', id);
+      $()('#check-' + id + ' .check-name').innerHTML = current.name;
+      $()('#check-' + id + ' .check-name').innerHTML = current.output;
+      $()('#check-' + id).attr('status', current.status);
     }
 
     function removeCheck (id, check) {

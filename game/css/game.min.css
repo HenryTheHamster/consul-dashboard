@@ -24,10 +24,17 @@ body {
 .info {
   font-size: 1em; }
 
+.check .check-name {
+  font-size: 1em; }
+
 .check[status=passing] {
   color: forestgreen; }
-  .check[status=passing] .name {
-    font-size: 1em; }
+
+.check[status=warning] {
+  color: goldenrod; }
+
+.check[status=critical] {
+  color: firebrick; }
 
 .leader {
   color: darkgrey; }

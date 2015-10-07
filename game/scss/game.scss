@@ -21,22 +21,33 @@ body {
   padding: 10px;
   height: 100%;
 }
- .info {
+
+.info {
   font-size: 1em;
 
- }
+}
 
- .check[status=passing] {
-  color: forestgreen;
-  
-  .name {
+.check {
+  .check-name {
     font-size: 1em;
   }
- }
+}
 
- .leader {
-  color: darkgrey;
- }
+.check[status=passing] {
+  color: forestgreen;
+}
+
+.check[status=warning] {
+  color: goldenrod;
+}
+
+.check[status=critical] {
+  color: firebrick;
+}
+
+.leader {
+color: darkgrey;
+}
 
 .name {
   font-size: 2em;

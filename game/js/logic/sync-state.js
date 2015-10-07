@@ -83,7 +83,9 @@ module.exports = {
                   id: c.Node + '-' + c.CheckID,
                   name: c.CheckID,
                   node: c.Node,
-                  status: c.Status
+                  status: c.Status,
+                  notes: c.Notes,
+                  output: c.Output
                 });
               });
             });
@@ -140,7 +142,7 @@ module.exports = {
         });
       }
 
-      return execute(sync).every(10).seconds();
+      return execute(sync).every(5).seconds();
     });
 
     define()('OnPhysicsFrame', function () {

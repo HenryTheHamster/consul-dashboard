@@ -1,2 +1,4 @@
 .check(id= "check-" + id, status= status)
-  .name #{name}
+  .check-name #{name}
+  if status != "passing"
+    .check-output (#{output})
