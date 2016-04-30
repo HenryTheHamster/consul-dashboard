@@ -13,7 +13,7 @@ module.exports = {
     var state = {};
     var dirty = false;
     var consul = Consul({
-      host: 'gandalf.ensemblejs.com',
+      host: '52.64.219.224',
       port: '8500'
     });
 
